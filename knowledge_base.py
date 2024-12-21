@@ -56,9 +56,11 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                                 ram = e.split(" ")[0]
                                 ram = float(ram) / 1024
                                 f.write("ram(" + entry + "," + str(ram) + ").\n")
+                                Prolog.assertz("ram(" + entry + "," + str(ram) + ")")
                             elif "gb".lower() in m.lower():
                                 ram = e.split(" ")[0]
                                 f.write("ram(" + entry + "," + str(ram) + ").\n")
+                                Prolog.assertz("ram(" + entry + "," + str(ram) + ")")
 
             cpu = row[8]  # Handle CPU
             if isinstance(cpu, str):
@@ -68,15 +70,25 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                         cpu = match.group(1).split(" ")[0]
                         cpu = float(cpu) / 1000
                         f.write("cpu(" + entry + "," + str(cpu) + ").\n")
+                        Prolog.assertz("cpu(" + entry + "," + str(cpu) + ")")
                     elif "ghz" in match.group(0).lower():
                         cpu = match.group(1).split(" ")[0]
                         f.write("cpu(" + entry + "," + cpu + ").\n")
+                        Prolog.assertz("cpu(" + entry + "," + str(cpu) + ")")
 
 
 
             camera = row[3]
             if isinstance(camera, str):
-                camera = camera.split(" ")[0]
+                match = re.search("(\d+\.*\d*)\s*mp", camera.lower())
+                if match:
+                    camera = match.group(1)
+                    f.write("camera(" + entry + "," + str(camera) + ").\n")
+                    Prolog.assertz("camera(" + entry + "," + str(camera) + ")")
+                else:
+                    camera = 0
+                    f.write("camera(" + entry + "," + str(camera) + ").\n")
+                    Prolog.assertz("camera(" + entry + "," + str(camera) + ")")
 
             usb = row[6]  # Handle usb
 
@@ -104,8 +116,32 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                     Prolog.assertz("gps(" + entry + "," + gps + ")")
 
 
+    # print(list(Prolog.query("bluetooth(X, no)")))
 
+    # Begin rule declaration
 
+    Prolog.assertz("good_cpu(X) :- " 
+                   "cpu(X, Value), "
+                   "Value >= 1")
+    Prolog.assertz("choose_cpu(X, Y) :- "
+                   "cpu(X, Value), "
+                   "Value >= Y")
+    Prolog.assertz("good_ram(X) :- "
+                   "ram(X, Value), "
+                   "Value >= 1")
+    Prolog.assertz("choose_ram(X, Y) :- "
+                   "ram(X, Value), "
+                   "Value >= 6")
+    Prolog.assertz("choose_camera(X, Y) :- "
+                   "camera(X, Value), "
+                   "Value >= Y")
+    Prolog.assertz("high-end(X) :- "
+                   "good_cpu(X), "
+                   "good_ram(X), "
+                   "choose_camera(X, 1)")
+    #Prolog.assertz("modern(X) :- "
+    #               "high-end(X), ")
+    print(list(Prolog.query("high-end(X)")))
 
             # length = row[]  # Handle device dimensions
             # height = row[]

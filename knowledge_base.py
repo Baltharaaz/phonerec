@@ -111,8 +111,8 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
             if isinstance(gps, str):
                 if "yes".lower() in gps.lower():
                     gps = "yes"
-                    f.write("gps(" + entry + ").\n")
-                    Prolog.assertz("gps(" + entry + ")")
+                    f.write("gps(" + entry + "," + gps + ").\n")
+                    Prolog.assertz("gps(" + entry + "," + gps + ")")
                 else:
                     gps = "no"
                     f.write("gps(" + entry + "," + gps + ").\n")
@@ -129,7 +129,7 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                         f.write("dimensions( " + entry + "," + length + "," + height + "," + width + ").\n")
                         Prolog.assertz("dimensions( " + entry + "," + length + "," + height + "," + width + ")")
 
-            resolution = row[10] # Handle screen size/resolution (it says resolution in the dataset but it's size)
+            resolution = row[10] # Handle screen size/resolution (it says resolution in the dataset, but it's size)
             if isinstance(resolution, str):
                 match = re.search("(\d+\.*\d*)\s*inches", resolution.lower())
                 if match:
@@ -201,12 +201,12 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "greater-camera(X, 10), "
                    "greater-storage(X, 24)")
-    Prolog.assertz("high-end(X) :- "  # A high end phone is one that fulfills good-cpu and good-ram as well as a 5 MP camera
+    Prolog.assertz("high-end(X) :- "  # A high-end phone is one that fulfills good-cpu and good-ram as well as a 5 MP camera
                    "phone(X),"
                    "good-cpu(X), "
                    "good-ram(X), "
                    "greater-camera(X, 5)")
-    Prolog.assertz("modern(X) :- " # A modern phone is a high end phone slimmer than 0.5 inches and more than 16 GB storage
+    Prolog.assertz("modern(X) :- " # A modern phone is a high-end phone slimmer than 0.5 inches and more than 16 GB storage
                    "high-end(X), "
                    "lesser-width(X, 0.5), "
                    "greater-storage(X, 16)")

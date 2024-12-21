@@ -6,21 +6,21 @@ import knowledge_base as kb
 import os
 
 
-def clear_screen():
+def clear_screen():  # Used to reset the terminal
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def runtime():
-    kb.kb_declare()
+    kb.kb_declare()  # Get our prolog knowledge base loaded in
     running = True
     clear_screen()
-    while running:
+    while running:  # Suspend terminal open
         choice = input("Welcome to the Phone Recommendation System! \n"
                        "Please select from the following options:\n"
                        "1. Get Phone by Classification\n"
                        "2. Exit\n")
         clear_screen()
-        match choice:
+        match choice:  # Change functionality based on choice, letting user either shut down or use ap
             case "1":
                 phone_type = input("Select a type of phone to receive suggestions: \n"
                                    "1. Good CPU\n"
@@ -106,7 +106,7 @@ def runtime():
                         running = False
                     case _:
                         pass
-            case "2":
+            case "2":  # End application
                 running = False
             case _:
                 pass
@@ -115,5 +115,5 @@ def runtime():
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == '__main__':  # If this file is executed
     runtime()

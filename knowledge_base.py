@@ -141,11 +141,11 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
     # Begin rule declaration; many rules are utilized in other rules (particularly the greater/lesser selection rules)
     #   to constrain their results.
 
-    Prolog.assertz("good-cpu(X) :- "
+    Prolog.assertz("good-cpu(X) :- "  # Good CPUs are ones with at least 1 GHz of speed
                    "phone(X),"
                    "cpu(X, Value), "
                    "Value >= 1")
-    Prolog.assertz("greater-cpu(X, Y) :- "
+    Prolog.assertz("greater-cpu(X, Y) :- "  # Functions to return CPU speeds above or below thresholds
                    "phone(X),"
                    "cpu(X, Value), "
                    "Value >= Y")
@@ -153,11 +153,11 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "cpu(X, Value), "
                    "Value < Y")
-    Prolog.assertz("good-ram(X) :- "
+    Prolog.assertz("good-ram(X) :- "  # Good RAM devices are ones with at least 4 GB of RAM
                    "phone(X),"
                    "ram(X, Value), "
-                   "Value >= 1")
-    Prolog.assertz("greater-ram(X, Y) :- "
+                   "Value >= 4")
+    Prolog.assertz("greater-ram(X, Y) :- "  # Rules to return RAM values above or below thresholds
                    "phone(X),"
                    "ram(X, Value), "
                    "Value >= Y")
@@ -165,7 +165,7 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "ram(X, Value), "
                    "Value < Y")
-    Prolog.assertz("greater-storage(X, Y) :-"
+    Prolog.assertz("greater-storage(X, Y) :-"  # Rules to return storage values above or below thresholds
                    "phone(X),"
                    "storage(X, Value), "
                    "Value >= Y")
@@ -173,7 +173,7 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "storage(X, Value), "
                    "Value < Y")
-    Prolog.assertz("greater-width(X, Y) :- "
+    Prolog.assertz("greater-width(X, Y) :- " # Rules to return width values above or below thresholds
                    "phone(X),"
                    "dimensions(X, Length, Height, Width), "
                    "Width >= Y")
@@ -181,15 +181,15 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "dimensions(X, Length, Height, Width), "
                    "Width < Y")
-    Prolog.assertz("greater-screen(X, Y) :- "
+    Prolog.assertz("greater-screen(X, Y) :- " # Rules to return screen sizes above or below thresholds
                    "phone(X),"
                    "screen_size(X, Value), "
                    "Value >= Y")
-    Prolog.assertz("lesser-screen(X, Y) :- "
+    Prolog.assertz("lesser-screen(X, Y) :- " 
                    "phone(X),"
                    "screen_size(X, Value), "
                    "Value < Y")
-    Prolog.assertz("greater-camera(X, Y) :- "
+    Prolog.assertz("greater-camera(X, Y) :- " # Rules to return camera qualities above or below thresholds
                    "phone(X),"
                    "camera(X, Value), "
                    "Value >= Y")
@@ -197,21 +197,21 @@ def kb_declare():  # Function to create the knowledge base from the .csv file
                    "phone(X),"
                    "camera(X, Value), "
                    "Value < Y")
-    Prolog.assertz("multimedia(X) :-"
+    Prolog.assertz("multimedia(X) :-" # A multimedia phone is one with at least 10 MP camera and 24 GB of storage
                    "phone(X),"
                    "greater-camera(X, 10), "
                    "greater-storage(X, 24)")
-    Prolog.assertz("high-end(X) :- "
+    Prolog.assertz("high-end(X) :- "  # A high end phone is one that fulfills good-cpu and good-ram as well as a 5 MP camera
                    "phone(X),"
                    "good-cpu(X), "
                    "good-ram(X), "
                    "greater-camera(X, 5)")
-    Prolog.assertz("modern(X) :- "
+    Prolog.assertz("modern(X) :- " # A modern phone is a high end phone slimmer than 0.5 inches and more than 16 GB storage
                    "high-end(X), "
                    "lesser-width(X, 0.5), "
                    "greater-storage(X, 16)")
-    Prolog.assertz("old-school(X) :- "
-                   "phone(X), "
+    Prolog.assertz("old-school(X) :- " # An old school phone is one without a gps wider than 0.6 inches. It also
+                   "phone(X), "          # has less than 2 GB of RAM and less than 1 GHz processor speeds.
                    "gps(X, no), "
                    "greater-width(X, 0.6), "
                    "lesser-ram(X, 2), "
